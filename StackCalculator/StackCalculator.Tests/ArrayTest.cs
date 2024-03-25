@@ -1,10 +1,12 @@
 namespace StackCalculator.Tests;
+using StackCalculator;
 
-public class Tests
+public class ArrayTests
 {
     [SetUp]
     public void Setup()
     {
+        var stackArray = new Array();
     }
 
     [Test]

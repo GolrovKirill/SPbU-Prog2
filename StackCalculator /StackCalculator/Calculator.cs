@@ -14,6 +14,8 @@ public class Calculator
 
     public double CalculatorOperation(string str)
     {
+        if (string.IsNullOrWhiteSpace(str))
+            throw new ArgumentException("Пустая строка");
         var exp = str.Split();
         foreach (var element in exp)
         {
@@ -67,7 +69,7 @@ public class Calculator
             case "*":
                 return ((num1 * num2), true);
             case "/":
-                return (Math.Abs(num2) < 1e-12) ?  throw new InvalidOperationException("Делние на 0") : ((num1 / num2), true);
+                return (Math.Abs(num2) < 1e-12) ?  throw new InvalidOperationException("Деление на 0") : ((num1 / num2), true);
             default:
                 return (-1, false);
         }
