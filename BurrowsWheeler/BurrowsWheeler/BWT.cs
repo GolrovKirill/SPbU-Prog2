@@ -2,51 +2,60 @@ namespace BurrowsWheeler;
 
 public static class BWT
 {
+    private const int AlphabetSize = 255;
+
+    /// <summary>
+    /// Method <c>Coding</c> codes the string.
+    /// </summary>
+    /// <param name="s">String.</param>
+    /// <returns>String with $.</returns>
     public static string Coding(string? s)
     {
         s += "$";
-        string[] arr = new string[s.Length];
+        var arr = new string[s.Length];
         for (int i = 0; i < s.Length; ++i)
         {
             arr[i] = s.Substring(i, s.Length - i);
         }
-        LexicoSort.Sort(arr); //Строим массив подстрок и сортируем его в лексикографическом порядке
+
+        LexicoSort.Sort(arr);
 
         s = "$" + s;
-        string str = "";
+        var str = string.Empty;
         for (int i = 0; i < arr.Length; i++)
         {
             for (int j = 0; j < s.Length; j++)
             {
                 if (arr[i] == s.Substring(j, s.Length - j))
                 {
-                    str = string.Concat(str, s[j - 1]); //Берём предшествующие подстрокам символы и собираем их в строку
+                    str = string.Concat(str, s[j - 1]);
                 }
             }
         }
-        return str; //Возвращаем закодировонную строку 
+
+        return str;
     }
 
-    
-    
-    
-    
-    
+    /// <summary>
+    /// Method <c>Decoding</c> decodes the string codes BWT.
+    /// </summary>
+    /// <param name="s">Codes string.</param>
+    /// <returns>Decodes string.</returns>
     public static string Decoding(string? s)
     {
-        int[] quantity = new int[255];
+        var quantity = new int[AlphabetSize];
         for (int i = 0; i < s.Length; i++)
         {
-            quantity[Convert.ToByte(s[i])] += 1; // Посчитали сколько раз встречается каждый символ
+            quantity[Convert.ToByte(s[i])] += 1;
         }
 
-        int[] arr = new int[255];
+        var arr = new int[AlphabetSize];
         int j = Convert.ToByte('$');
-        for (int i = (j + 1); i < quantity.Length; i++)
+        for (int i = j + 1; i < quantity.Length; i++)
         {
             if (quantity[i] != 0)
             {
-                arr[i] = arr[j] + quantity[j]; // массив позиций элементов в отсортированной строке 
+                arr[i] = arr[j] + quantity[j];
                 j = i;
             }
         }
@@ -54,18 +63,18 @@ public static class BWT
         int[] p = new int[s.Length];
         for (int i = 0; i < p.Length; i++)
         {
-            p[i] = (arr[Convert.ToByte(s[i])]); // строка чисел выражающая перестановки для s
-            arr[Convert.ToByte(s[i])] += 1; // выполнив которые декодируем s
+            p[i] = arr[Convert.ToByte(s[i])];
+            arr[Convert.ToByte(s[i])] += 1;
         }
 
-        string str = "";
-        int id = (s.IndexOf("$", StringComparison.Ordinal));
+        var str = string.Empty;
+        var id = s.IndexOf('$');
         for (int i = 0; i < (s.Length - 1); ++i)
         {
-            str =  s[p[id]] + str; // выполнили перестановку
+            str = s[p[id]] + str;
             id = p[id];
         }
-        return str; // Возвращаем декодированную строку
-        
+
+        return str;
     }
 }

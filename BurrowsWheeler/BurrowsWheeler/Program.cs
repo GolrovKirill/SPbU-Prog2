@@ -1,13 +1,14 @@
 ﻿namespace BurrowsWheeler;
 
-static class Program
+internal static class Program
 {
-    static void Main( )
+    private static void Main()
     {
-        string? s = Console.ReadLine();
-        string strin = BWT.Coding(s);
-        string strout = BWT.Decoding((strin));
-        
+        Console.Write("Input the string for coding with BWT:");
+        var s = Console.ReadLine();
+        var strin = BWT.Coding(s);
+        var strout = BWT.Decoding(strin);
+
         Console.WriteLine(strin);
         Console.WriteLine(strout);
     }
