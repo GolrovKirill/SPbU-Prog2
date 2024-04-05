@@ -1,75 +1,102 @@
+namespace StackCalculator;
+
 using System.Diagnostics;
 using System.Text;
 
-namespace StackCalculator;
-
+/// <summary>
+/// Class <c>Calculator</c> considers the expression.
+/// </summary>
 public class Calculator
 {
+    private const double ComparisonAccuracy = 1e-12;
+
     private readonly InterfaceStack stack;
-    
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Calculator"/> class.
+    /// </summary>
+    /// <param name="stack">Stack.</param>
     public Calculator(InterfaceStack stack)
     {
         this.stack = stack;
     }
 
-    public double CalculatorOperation(string str)
+    /// <summary>
+    /// Method <c>CalculatorOperation</c> return result the expression.
+    /// </summary>
+    /// <param name="str">Expression.</param>
+    /// <returns>true if expression correct and result this expression.</returns>
+    public (double, bool) CalculatorOperation(string str)
     {
         if (string.IsNullOrWhiteSpace(str))
-            throw new ArgumentException("Пустая строка");
+        {
+            return (0, false);
+        }
+
         var exp = str.Split();
         foreach (var element in exp)
         {
-            if (double.TryParse(element, out double num))
+            if (double.TryParse(element, out var num))
             {
                 this.stack.Push(num);
             }
-
-            else if (element == "+" || element == "-" || element == "*" || element == "/")
+            else if (element is "+" or "-" or "*" or "/")
             {
                 if (!this.stack.Count())
                 {
-                    double num1 = this.stack.Pop();
+                    var num1 = this.stack.Pop();
                     if (!this.stack.Count())
                     {
-                        double num2 = this.stack.Pop();
+                        var num2 = this.stack.Pop();
                         var (num3, rez) = Operation(num1, num2, element);
-                        
-                        if (rez) { this.stack.Push(num3); }
-                    }
-                    else { throw new InvalidOperationException("В стеке только одно число, невозможно совершить эту операцию");}
-                }
-                else { throw new InvalidOperationException("Стек пуст, невозможно совершить операцию");}
-            }
-            
-            else {throw new InvalidOperationException("Неизвестный символ");}
-        }
-        
-        if (!this.stack.Count())
-        {
-            double tmp = this.stack.Pop();
-            if (!this.stack.Count())
-            {
-                throw new InvalidOperationException("В стеке осталось больше одного числа");
-            }
 
-            return tmp;
+                        if (rez)
+                        {
+                            this.stack.Push(num3);
+                        }
+                        else
+                        {
+                            return (1, false);
+                        }
+                    }
+                    else
+                    {
+                        return (2, false);
+                    }
+                }
+                else
+                {
+                    return (3, false);
+                }
+            }
+            else
+            {
+                return (4, false);
+            }
         }
-        
-        throw new InvalidOperationException("Стек пуст, программе нечего возвращать");
+
+        if (this.stack.Count())
+        {
+            return (5, false);
+        }
+
+        var tmp = this.stack.Pop();
+        return !this.stack.Count() ? (6, false) : (tmp, true);
     }
-    
-    private (double, bool) Operation(double num1, double num2, string element)
+
+    private static (double, bool) Operation(double num1, double num2, string element)
     {
         switch (element)
         {
             case "+":
-                return ((num1 + num2), true);
+                return (num1 + num2, true);
             case "-":
-                return ((num1 - num2), true);
+                return (num1 - num2, true);
             case "*":
-                return ((num1 * num2), true);
+                return (num1 * num2, true);
             case "/":
-                return (Math.Abs(num2) < 1e-12) ?  throw new InvalidOperationException("Деление на 0") : ((num1 / num2), true);
+                return Math.Abs(num2) < ComparisonAccuracy ? (0, false) : (num1 / num2, true);
+
             default:
                 return (-1, false);
         }

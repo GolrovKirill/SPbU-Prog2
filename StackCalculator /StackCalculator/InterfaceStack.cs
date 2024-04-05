@@ -1,8 +1,25 @@
 namespace StackCalculator;
 
+/// <summary>
+/// Creat interface for works with stack.
+/// </summary>
 public interface InterfaceStack
 {
-    double Pop(); //  Извлекает и возвращает верхнее рациональное число стека
-    void Push(double element); // Добавление нового рациональого числа в верх стека
-    bool Count(); // Проверяет что стек пуст, true - пустой
+    /// <summary>
+    /// Return and clean the element in stack.
+    /// </summary>
+    /// <returns>Number.</returns>
+    double Pop();
+
+    /// <summary>
+    /// Inputs element in stack.
+    /// </summary>
+    /// <param name="element">Number.</param>
+    void Push(double element);
+
+    /// <summary>
+    /// Write stack have element.
+    /// </summary>
+    /// <returns>true if there is at least one element, otherwise false.</returns>
+    bool Count();
 }

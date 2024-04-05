@@ -1,28 +1,70 @@
-﻿using static StackCalculator.Calculator;
+﻿namespace StackCalculator;
 
-namespace StackCalculator;
+using System.Linq.Expressions;
+using static StackCalculator.Calculator;
 
-class Program
+internal class Program
 {
-    static void Main(string[] args)
-    {
-        Console.WriteLine("Введите выражение");
+    private const double ComparisonAccuracy = 1e-12;
 
-        string? str = Console.ReadLine();
+    private static void Main(string[] args)
+    {
         var stackArray = new Calculator(new Array());
         var stackList = new Calculator(new List());
+        var end = true;
 
-        if (str != null)
+        while (end)
         {
-            var rez1 = stackArray.CalculatorOperation(str);
-            var rez2 = stackList.CalculatorOperation(str);
-            
-            if ((Math.Abs(rez1) - (Math.Abs(rez2)) < 1e-12))
+            Console.WriteLine("Input expression or press enter for end program:");
+            var expression = Console.ReadLine();
+
+            if (expression != string.Empty)
             {
-                Console.WriteLine(rez1);
+                var (replyArray, resultArray) = stackArray.CalculatorOperation(expression);
+                var (replyList, resultList) = stackList.CalculatorOperation(expression);
+
+                if (resultList & resultArray)
+                {
+                    Console.WriteLine(Math.Abs(replyArray - replyList) < ComparisonAccuracy
+                        ? $"{replyArray}"
+                        : "Error, the result in the array stack is not equal to the result in the list stack");
+                    Console.WriteLine(replyArray);
+                    Console.WriteLine(replyList);
+                }
+                else if (!resultList & !resultArray)
+                {
+                    switch (replyArray)
+                    {
+                        case 0:
+                            Console.WriteLine("String with expression Empty");
+                            break;
+                        case 1:
+                            Console.WriteLine("In expression division by zero");
+                            break;
+                        case 2:
+                            Console.WriteLine("There is only one number on the stack, it is impossible to perform this operation");
+                            break;
+                        case 3:
+                            Console.WriteLine("Stack is empty, no operation can be performed");
+                            break;
+                        case 4:
+                            Console.WriteLine("An unknown symbol");
+                            stackArray = new Calculator(new Array());
+                            stackList = new Calculator(new List());
+                            break;
+                        case 5:
+                            Console.WriteLine("The stack is empty, the program has nothing to return");
+                            break;
+                        case 6:
+                            Console.WriteLine("There is more than one number left on the stack");
+                            break;
+                    }
+                }
             }
-            else { throw new InvalidOperationException("Разные ответы"); }
+            else
+            {
+                end = false;
+            }
         }
-        else {throw new InvalidOperationException("Пустая строка");}
     }
 }
