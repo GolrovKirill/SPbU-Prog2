@@ -2,14 +2,15 @@ namespace StackCalculator.Tests;
 
 [TestFixture]
 [TestOf(typeof(List))]
+[TestOf(typeof(Array))]
 public class CalculatorTest
 {
     private const double ComparisonAccuracy = 1e-12;
 
     private static IEnumerable<Calculator> Initialize()
     {
-        yield return new Calculator(new List());
-        yield return new Calculator(new Array());
+        yield return new Calculator(new ListStack<double>());
+        yield return new Calculator(new Array<double>());
     }
 
     [TestCaseSource(nameof(Initialize))]

@@ -10,13 +10,13 @@ public class Calculator
 {
     private const double ComparisonAccuracy = 1e-12;
 
-    private readonly InterfaceStack stack;
+    private readonly InterfaceStack<double> stack;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Calculator"/> class.
     /// </summary>
     /// <param name="stack">Stack.</param>
-    public Calculator(InterfaceStack stack)
+    public Calculator(InterfaceStack<double> stack)
     {
         this.stack = stack;
     }

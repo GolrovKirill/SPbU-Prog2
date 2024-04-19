@@ -9,8 +9,8 @@ internal class Program
 
     private static void Main(string[] args)
     {
-        var stackArray = new Calculator(new Array());
-        var stackList = new Calculator(new List());
+        var stackArray = new Calculator(new Array<double>());
+        var stackList = new Calculator(new ListStack<double>());
         var end = true;
 
         while (end)
@@ -28,8 +28,6 @@ internal class Program
                     Console.WriteLine(Math.Abs(replyArray - replyList) < ComparisonAccuracy
                         ? $"{replyArray}"
                         : "Error, the result in the array stack is not equal to the result in the list stack");
-                    Console.WriteLine(replyArray);
-                    Console.WriteLine(replyList);
                 }
                 else if (!resultList & !resultArray)
                 {
@@ -49,8 +47,8 @@ internal class Program
                             break;
                         case 4:
                             Console.WriteLine("An unknown symbol");
-                            stackArray = new Calculator(new Array());
-                            stackList = new Calculator(new List());
+                            stackArray = new Calculator(new Array<double>());
+                            stackList = new Calculator(new ListStack<double>());
                             break;
                         case 5:
                             Console.WriteLine("The stack is empty, the program has nothing to return");

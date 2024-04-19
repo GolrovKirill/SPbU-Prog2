@@ -1,46 +1,48 @@
 namespace StackCalculator;
 
 /// <inheritdoc />
-public class Array : InterfaceStack
+public class Array<T> : InterfaceStack<T>
 {
-    private double[] stack = [0];
+    private T?[] stack = new T?[1];
 
     private int size = 1;
 
     private int idtop = -1;
 
     /// <inheritdoc/>
-    public double Pop()
+    public T? Pop()
     {
-        if (this.Count())
+        if (Count())
         {
             throw new InvalidOperationException("Try take element from empty stack");
         }
 
-        this.idtop -= 1;
-        return this.stack[this.idtop + 1];
+        idtop -= 1;
+
+        return stack[idtop + 1];
     }
 
     /// <inheritdoc/>
-    public void Push(double element)
+    public void Push(T? element)
     {
-        this.ArrResize();
-        this.idtop += 1;
-        this.stack[this.idtop] = element;
+        ArrResize();
+        idtop += 1;
+
+        stack[idtop] = element;
     }
 
     /// <inheritdoc/>
     public bool Count()
     {
-        return this.idtop == -1;
+        return idtop == -1;
     }
 
     private void ArrResize()
     {
-        if ((this.idtop + 1) >= this.size)
+        if ((idtop + 1) >= size)
         {
-            this.size += 1;
-            System.Array.Resize(ref this.stack, this.size);
+            size += 1;
+            Array.Resize(ref stack, size);
         }
     }
 }

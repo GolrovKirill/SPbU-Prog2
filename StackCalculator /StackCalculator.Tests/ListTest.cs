@@ -6,47 +6,47 @@ public class ListTest
 {
     private const double ComparisonAccuracy = 1e-12;
 
-    private static IEnumerable<List> Initialize()
+    private static IEnumerable<ListStack<double>> Initialize()
     {
-        yield return new List();
+        yield return new ListStack<double>();
     }
 
     [TestCaseSource(nameof(Initialize))]
-    public void PushCorrect(List stackList)
+    public void PushCorrect(ListStack<double> stackList)
     {
         stackList.Push(1);
         Assert.That(stackList != null);
     }
 
     [TestCaseSource(nameof(Initialize))]
-    public void Push_and_CountCorrect(List stackList)
+    public void Push_and_CountCorrect(ListStack<double> stackList)
     {
         stackList.Push(1);
         Assert.That(!stackList.Count());
     }
 
     [TestCaseSource(nameof(Initialize))]
-    public void CountCorrect(List stackList)
+    public void CountCorrect(ListStack<double> stackList)
     {
         Assert.That(stackList.Count());
     }
 
     [TestCaseSource(nameof(Initialize))]
-    public void PopCorrect(List stackList)
+    public void PopCorrect(ListStack<double> stackList)
     {
         stackList.Push(1);
         Assert.That(Math.Abs(stackList.Pop() - 1) < ComparisonAccuracy);
     }
 
     [TestCaseSource(nameof(Initialize))]
-    public void PopNullCorrect(List stackList)
+    public void PopNullCorrect(ListStack<double> stackList)
     {
         var str = Assert.Throws<InvalidOperationException>(() => stackList.Pop());
         Assert.That(str.Message, Is.EqualTo("Try take element from empty stack"));
     }
 
     [TestCaseSource(nameof(Initialize))]
-    public void StackCorrect(List stackList)
+    public void StackCorrect(ListStack<double> stackList)
     {
         stackList.Push(1);
         stackList.Push(2);
@@ -56,7 +56,7 @@ public class ListTest
     }
 
     [TestCaseSource(nameof(Initialize))]
-    public void PushBigNumberCorrect(List stackList)
+    public void PushBigNumberCorrect(ListStack<double> stackList)
     {
         const double num = 1.8e307;
         stackList.Push(num);
