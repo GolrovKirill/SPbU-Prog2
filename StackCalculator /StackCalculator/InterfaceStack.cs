@@ -9,13 +9,13 @@ public interface InterfaceStack <T>
     /// Return and clean the element in stack.
     /// </summary>
     /// <returns>Number.</returns>
-    T? Pop();
+    T Pop();
 
     /// <summary>
     /// Inputs element in stack.
     /// </summary>
     /// <param name="element">Number.</param>
-    void Push(T? element);
+    void Push(T element);
 
     /// <summary>
     /// Write stack have element.

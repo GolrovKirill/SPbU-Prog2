@@ -41,8 +41,11 @@ public class ArrayTest
     [TestCaseSource(nameof(Initialize))]
     public void PopNullCorrect(Array<double> stackArray)
     {
-        var str = Assert.Throws<InvalidOperationException>(() => stackArray.Pop());
-        Assert.That(str.Message, Is.EqualTo("Try take element from empty stack"));
+        var str2 = Assert.Throws<InvalidOperationException>(() => stackArray.Pop());
+        var str1 = Assert.Throws<InvalidOperationException>(() => stackArray.Pop());
+
+        Assert.That(str1.Message, Is.EqualTo("Try take element from empty stack"));
+        Assert.That(str2.Message, Is.EqualTo("Try take element from empty stack"));
     }
 
     [TestCaseSource(nameof(Initialize))]
@@ -50,8 +53,10 @@ public class ArrayTest
     {
         stackArray.Push(1);
         stackArray.Push(2);
+
         var first = stackArray.Pop();
         var second = stackArray.Pop();
+
         Assert.That((Math.Abs(first - 2) < ComparisonAccuracy) && (Math.Abs(second - 1) < ComparisonAccuracy));
     }
 

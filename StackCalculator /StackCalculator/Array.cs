@@ -10,20 +10,20 @@ public class Array<T> : InterfaceStack<T>
     private int idtop = -1;
 
     /// <inheritdoc/>
-    public T? Pop()
+    public T Pop()
     {
         if (Count())
         {
             throw new InvalidOperationException("Try take element from empty stack");
         }
 
-        idtop -= 1;
+        this.idtop -= 1;
 
-        return stack[idtop + 1];
+        return stack[idtop + 1] ?? throw new InvalidOperationException("Try take element from empty stack");
     }
 
     /// <inheritdoc/>
-    public void Push(T? element)
+    public void Push(T element)
     {
         ArrResize();
         idtop += 1;

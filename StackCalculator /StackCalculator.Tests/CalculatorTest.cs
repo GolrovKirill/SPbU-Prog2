@@ -1,11 +1,34 @@
 namespace StackCalculator.Tests;
 
+using Moq;
+
 [TestFixture]
-[TestOf(typeof(List))]
-[TestOf(typeof(Array))]
 public class CalculatorTest
 {
     private const double ComparisonAccuracy = 1e-12;
+
+    [Test]
+    public void MockTest()
+    {
+        var mock = new Mock<InterfaceStack<double>>();
+        var calculator = new Calculator(mock.Object);
+
+        mock.SetupSequence(x => x.Count())
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(true);
+
+        mock.SetupSequence(x => x.Pop())
+            .Returns(2)
+            .Returns(2)
+            .Returns(4);
+
+        const string expression = "2 2 *";
+
+        var (res, reply) = calculator.CalculatorOperation(expression);
+        Assert.That(reply & Math.Abs(res - 4) < ComparisonAccuracy);
+    }
 
     private static IEnumerable<Calculator> Initialize()
     {
@@ -13,21 +36,60 @@ public class CalculatorTest
         yield return new Calculator(new Array<double>());
     }
 
-    [TestCaseSource(nameof(Initialize))]
-    public void EmptyStringCorrect(Calculator calculator)
+    [Test]
+    public void EmptyStringCorrect()
     {
         // arrange
-        var exp = "   ";
+        var mock = new Mock<InterfaceStack<double>>();
+        var calculator = new Calculator(mock.Object);
+
+        mock.Setup(x => x.Count())
+            .Returns(true);
+
+        mock.Setup(x => x.Pop())
+            .Returns(0);
+
+        const string exp = "   ";
 
         // assert
         var (res, reply) = calculator.CalculatorOperation(exp);
         Assert.That(!reply & res == 0);
     }
 
-    [TestCaseSource(nameof(Initialize))]
-    public void CalculatorCorrectMultiplication(Calculator calculator)
+    [Test]
+    public void CalculatorCorrectMultiplication()
     {
         // arrange
+        var mock = new Mock<InterfaceStack<double>>();
+        var calculator = new Calculator(mock.Object);
+
+        mock.SetupSequence(x => x.Count())
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(true);
+
+        mock.SetupSequence(x => x.Pop())
+            .Returns(6)
+            .Returns(5)
+            .Returns(30)
+            .Returns(4)
+            .Returns(120)
+            .Returns(3)
+            .Returns(360)
+            .Returns(2)
+            .Returns(720)
+            .Returns(1)
+            .Returns(720);
+
         var exp = "1 2 3 4 5 6 * * * * *";
 
         // assert
@@ -35,10 +97,28 @@ public class CalculatorTest
         Assert.That(reply & Math.Abs(res - 720) < ComparisonAccuracy);
     }
 
-    [TestCaseSource(nameof(Initialize))]
-    public void CalculatorCorrectSum(Calculator calculator)
+    [Test]
+    public void CalculatorCorrectSum()
     {
         // arrange
+        var mock = new Mock<InterfaceStack<double>>();
+        var calculator = new Calculator(mock.Object);
+
+        mock.SetupSequence(x => x.Count())
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(true);
+
+        mock.SetupSequence(x => x.Pop())
+            .Returns(0.001)
+            .Returns(-0.412)
+            .Returns(-0.411)
+            .Returns(1.3411)
+            .Returns(0.9301);
+
         var exp = "1,3411 -0,412 0,001 + +";
 
         // assert
@@ -46,10 +126,28 @@ public class CalculatorTest
         Assert.That(reply & Math.Abs(res - 0.9301) < ComparisonAccuracy);
     }
 
-    [TestCaseSource(nameof(Initialize))]
-    public void CalculatorCorrectDivision(Calculator calculator)
+    [Test]
+    public void CalculatorCorrectDivision()
     {
         // arrange
+        var mock = new Mock<InterfaceStack<double>>();
+        var calculator = new Calculator(mock.Object);
+
+        mock.SetupSequence(x => x.Count())
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(true);
+
+        mock.SetupSequence(x => x.Pop())
+            .Returns(125)
+            .Returns(-0.25)
+            .Returns(-500)
+            .Returns(5)
+            .Returns(-100);
+
         var exp = "5 -0,25 125 / /";
 
         // assert
@@ -57,10 +155,28 @@ public class CalculatorTest
         Assert.That(reply & Math.Abs(res - (-100)) < ComparisonAccuracy);
     }
 
-    [TestCaseSource(nameof(Initialize))]
-    public void CalculatorCorrectSubtraction(Calculator calculator)
+    [Test]
+    public void CalculatorCorrectSubtraction()
     {
         // arrange
+        var mock = new Mock<InterfaceStack<double>>();
+        var calculator = new Calculator(mock.Object);
+
+        mock.SetupSequence(x => x.Count())
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(false)
+            .Returns(true);
+
+        mock.SetupSequence(x => x.Pop())
+            .Returns(-1234.23)
+            .Returns(4343)
+            .Returns(-5577.23)
+            .Returns(0.342)
+            .Returns(-5577.572);
+
         var exp = "0,342 4343 -1234,23 - -";
 
         // assert
@@ -68,10 +184,17 @@ public class CalculatorTest
         Assert.That(reply & Math.Abs(res - (-5577.572)) < ComparisonAccuracy);
     }
 
-    [TestCaseSource(nameof(Initialize))]
-    public void OneNumberOneOperationCorrect(Calculator calculator)
+    [Test]
+    public void OneNumberOneOperationCorrect()
     {
         // arrange
+        var mock = new Mock<InterfaceStack<double>>();
+        var calculator = new Calculator(mock.Object);
+
+        mock.SetupSequence(x => x.Count())
+            .Returns(false)
+            .Returns(true);
+
         var exp = "1 *";
 
         // assert
@@ -79,10 +202,16 @@ public class CalculatorTest
         Assert.That(!reply & Math.Abs(res - 2) < ComparisonAccuracy);
     }
 
-    [TestCaseSource(nameof(Initialize))]
-    public void ZeroNumberOneOperationCorrect(Calculator calculator)
+    [Test]
+    public void ZeroNumberOneOperationCorrect()
     {
         // arrange
+        var mock = new Mock<InterfaceStack<double>>();
+        var calculator = new Calculator(mock.Object);
+
+        mock.Setup(x => x.Count())
+            .Returns(true);
+
         var exp = "*";
 
         // assert
@@ -90,10 +219,13 @@ public class CalculatorTest
         Assert.That(!reply & Math.Abs(res - 3) < ComparisonAccuracy);
     }
 
-    [TestCaseSource(nameof(Initialize))]
-    public void OperationNoCorrect(Calculator calculator)
+    [Test]
+    public void OperationNoCorrect()
     {
         // arrange
+        var mock = new Mock<InterfaceStack<double>>();
+        var calculator = new Calculator(mock.Object);
+
         var exp = "1 ^";
 
         // assert
@@ -101,10 +233,13 @@ public class CalculatorTest
         Assert.That(!reply & Math.Abs(res - 4) < ComparisonAccuracy);
     }
 
-    [TestCaseSource(nameof(Initialize))]
-    public void ThreeNumberOneOperationCorrect(Calculator calculator)
+    [Test]
+    public void ThreeNumberOneOperationCorrect()
     {
         // arrange
+        var mock = new Mock<InterfaceStack<double>>();
+        var calculator = new Calculator(mock.Object);
+
         var exp = "1 2 3 -";
 
         // assert
@@ -112,10 +247,13 @@ public class CalculatorTest
         Assert.That(!reply & Math.Abs(res - 6) < ComparisonAccuracy);
     }
 
-    [TestCaseSource(nameof(Initialize))]
-    public void ZeroNumberZeroOperationCorrect(Calculator calculator)
+    [Test]
+    public void ZeroNumberZeroOperationCorrect()
     {
         // arrange
+        var mock = new Mock<InterfaceStack<double>>();
+        var calculator = new Calculator(mock.Object);
+
         var exp = "0 5 /";
 
         // assert
