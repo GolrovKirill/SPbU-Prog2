@@ -6,7 +6,7 @@ namespace UniqueList;
 /// <typeparam name="T">Type elements.</typeparam>
 public class UniqueList<T> : MyList<T>
 {
-    private static (bool, int) Contains(T element)
+    private (bool, int) Contains(T element)
     {
         var current = head;
 

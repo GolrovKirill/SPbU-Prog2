@@ -4,16 +4,16 @@ using System.Collections;
 
 public class MyList<T> : IEnumerable<T>
 {
-    protected static Node<T>? head;
+    protected Node<T>? head;
 
-    private static int cnt;
+    private int cnt;
 
     /// <summary>
     /// Add new element in list.
     /// </summary>
     /// <param name="element">Adding element.</param>
     /// <param name="index">Index element in list.</param>
-    public static void Add(T element, int index)
+    public void Add(T element, int index)
     {
         if (index > cnt)
         {
