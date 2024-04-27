@@ -8,9 +8,9 @@ public class Program
     {
         var trie = new TrieVertices();
         Console.WriteLine("Start Trie");
-        bool end = true;
+        var run = false;
 
-        while (end)
+        while (!run)
         {
             Console.Write("WriteLine: Add - 1, Contains - 2, Remove - 3, StartsWithPrefix - 4, Size - 5, Exit - 6   ");
             var cnt = Console.ReadLine();
@@ -27,14 +27,7 @@ public class Program
                         break;
                     }
 
-                    if (!trie.Add(str))
-                    {
-                        Console.WriteLine("Error Add");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Successfully Add");
-                    }
+                    Console.WriteLine(!trie.Add(str) ? "Error Add" : "Successfully Add");
 
                     break;
 
@@ -48,14 +41,7 @@ public class Program
                         break;
                     }
 
-                    if (!trie.Contains(str))
-                    {
-                        Console.WriteLine("Not Found");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Found");
-                    }
+                    Console.WriteLine(!trie.Contains(str) ? "Not Found" : "Found");
 
                     break;
 
@@ -69,14 +55,7 @@ public class Program
                         break;
                     }
 
-                    if (!trie.Remove(str))
-                    {
-                        Console.WriteLine("Error Remove");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Successfully Remove");
-                    }
+                    Console.WriteLine(!trie.Remove(str) ? "Error Remove" : "Successfully Remove");
 
                     break;
 
@@ -98,7 +77,7 @@ public class Program
                     break;
 
                 case "6":
-                    end = false;
+                    run = true;
                     break;
 
                 default:

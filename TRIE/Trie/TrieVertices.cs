@@ -2,23 +2,23 @@ namespace Trie;
 
 public class TrieVertices
 {
-    public class Vertex
+    private class Vertex
     {
         /// <summary>
-        /// Stores the number of words starting with a prefix ending with this vertex
+        /// Gets or sets stores the number of words starting with a prefix ending with this vertex.
         /// </summary>
         public int Prefix { get; set; }
 
         /// <summary>
-        /// Creates a dictionary of subvertices
+        /// Gets or sets creates a dictionary of subversives.
         /// </summary>
-        public Dictionary<char, Vertex> SubVertices { get; set; }
+        public Dictionary<char, Vertex> SubVertices { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Vertex"/> class.
-        /// Fills in the fields of the subvertices
+        /// Fills in the fields of the subversives.
         /// </summary>
-        public Vertex()
+        protected internal Vertex()
         {
             this.Flag = false;
             this.Prefix = 0;
@@ -31,58 +31,51 @@ public class TrieVertices
         public bool Flag { get; set; }
 
         /// <summary>
-        /// Used to find a sub-vertex
+        /// Used to find a sub-vertex.
         /// </summary>
-        /// <returns>If there is such a subvertex with this symbol true, otherwise false</returns>
+        /// <returns>If there is such a subverted with this symbol true, otherwise false.</returns>
         public Vertex? FindSubVertex(char symbol)
         {
             ArgumentOutOfRangeException.ThrowIfNegative(symbol);
-            if (this.SubVertices.TryGetValue(symbol, out var value))
-            {
-                return value;
-            }
-            else
-            {
-                return null;
-            }
+            return this.SubVertices.TryGetValue(symbol, out var value) ? value : null;
         }
     }
 
     /// <summary>
-    /// Initializing the root
+    /// Initializing the root.
     /// </summary>
-    protected Vertex? root = new Vertex();
+    private Vertex? root = new();
 
     /// <summary>
-    /// Adding a word to Trie
+    /// Adding a word to Trie.
     /// </summary>
     /// <returns>If you manage to add a word to Trie then true, otherwise false.</returns>
     public bool Add(string element)
     {
-        if (element == null)
-        {
-            throw new ArgumentNullException(nameof(element));
-        }
+        ArgumentNullException.ThrowIfNull(element);
 
         if (this.Contains(element))
         {
             return false;
         }
 
-        Vertex? current = this.root;
+        var current = this.root;
 
         foreach (var symbol in element)
         {
-            var subvertex = current?.FindSubVertex(symbol);
-            current.Prefix += 1;
-
-            if (subvertex == null)
+            var subverted = current?.FindSubVertex(symbol);
+            if (current != null)
             {
-                subvertex = new Vertex();
-                current.SubVertices.Add(symbol, subvertex);
+                current.Prefix += 1;
+
+                if (subverted == null)
+                {
+                    subverted = new Vertex();
+                    current.SubVertices.Add(symbol, subverted);
+                }
             }
 
-            current = subvertex;
+            current = subverted;
         }
 
         current.Flag = true;
@@ -90,22 +83,17 @@ public class TrieVertices
     }
 
     /// <summary>
-    /// Checks if Trie contains a word
+    /// Checks if Trie contains a word.
     /// </summary>
-    /// <returns>If it contains a word in Trie then true, otherwise false</returns>
+    /// <returns>If it contains a word in Trie then true, otherwise false.</returns>
     public bool Contains(string element)
     {
-        if (element == null)
+        ArgumentNullException.ThrowIfNull(element);
+
+        var current = this.root;
+
+        foreach (var subvertex in element.Select(symbol => current?.FindSubVertex(symbol)))
         {
-            throw new ArgumentNullException(nameof(element));
-        }
-
-        Vertex? current = this.root;
-
-        foreach (var symbol in element)
-        {
-            var subvertex = current?.FindSubVertex(symbol);
-
             if (subvertex == null)
             {
                 return false;
@@ -118,26 +106,22 @@ public class TrieVertices
     }
 
     /// <summary>
-    /// Removes a word from a Trie
+    /// Removes a word from a Trie.
     /// </summary>
     /// <returns>If you succeed in removing a word from Trie then true, otherwise false.</returns>
     public bool Remove(string element)
     {
-        if (element == null)
-        {
-            throw new ArgumentNullException(nameof(element));
-        }
+        ArgumentNullException.ThrowIfNull(element);
 
         if (!this.Contains(element))
         {
             return false;
         }
 
-        Vertex? current = this.root;
+        var current = this.root;
 
-        foreach (var symbol in element)
+        foreach (var subvertex in element.Select(symbol => current?.FindSubVertex(symbol)))
         {
-            var subvertex = current?.FindSubVertex(symbol);
             current.Prefix -= 1;
             current = subvertex;
         }
@@ -147,22 +131,17 @@ public class TrieVertices
     }
 
     /// <summary>
-    /// Counts the number of words starting with a given prefix in Trie
+    /// Counts the number of words starting with a given prefix in Trie.
     /// </summary>
     /// <returns>Word count.</returns>
     public int HowManyStartsWithPrefix(string prefix)
     {
-        if (prefix == null)
+        ArgumentNullException.ThrowIfNull(prefix);
+
+        var current = this.root;
+
+        foreach (var subvertex in prefix.Select(symbol => current?.FindSubVertex(symbol)))
         {
-            throw new ArgumentNullException(nameof(prefix));
-        }
-
-        Vertex? current = this.root;
-
-        foreach (var symbol in prefix)
-        {
-            var subvertex = current?.FindSubVertex(symbol);
-
             if (subvertex == null)
             {
                 return 0;
@@ -175,7 +154,7 @@ public class TrieVertices
     }
 
     /// <summary>
-    /// Counts how many words there are in a Trie
+    /// Counts how many words there are in a Trie.
     /// </summary>
     /// <returns>Word count.</returns>
     public int Size()
