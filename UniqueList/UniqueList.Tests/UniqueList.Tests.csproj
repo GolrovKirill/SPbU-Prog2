@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UniqueList\UniqueList.csproj" />
+    <ProjectReference Include="..\Unique\Unique.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-namespace UniqueList;
+namespace Unique;
 
 public class ListExceptionsAdd(string? message) : SystemException(message)
 {

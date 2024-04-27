@@ -1,4 +1,4 @@
-namespace UniqueList;
+namespace Unique;
 
 /// <summary>
 /// List unique elements.
@@ -29,16 +29,16 @@ public class UniqueList<T> : MyList<T>
     /// <param name="element">Adding element.</param>
     /// <param name="newIndex">Index element in list.</param>
     /// <exception cref="ListExceptionsAdd">Return exception if element contains in list.</exception>
-    public void UniqueAdd(T element, int newIndex)
+    public override void Add(T element, int newIndex)
     {
         var (res, index) = Contains(element);
 
         if (res)
         {
-            throw new ListExceptionsAdd("This element have in list");
+            throw new ListExceptionsAdd("This element is in list");
         }
 
-        Add(element, newIndex);
+        base.Add(element, newIndex);
     }
 
     /// <summary>
@@ -46,7 +46,7 @@ public class UniqueList<T> : MyList<T>
     /// </summary>
     /// <param name="element">Removing element.</param>
     /// <exception cref="ListExceptionsRemove">Return exception if element no contains in list.</exception>
-    public void UniqueRemove(T element)
+    public override void Remove(T element)
     {
         var (res, index) = Contains(element);
 
@@ -55,7 +55,7 @@ public class UniqueList<T> : MyList<T>
             throw new ListExceptionsRemove("This element have not in list");
         }
 
-        Remove(index);
+        base.Remove(element);
     }
 
     /// <summary>
@@ -64,7 +64,7 @@ public class UniqueList<T> : MyList<T>
     /// <param name="element">Changing element.</param>
     /// <param name="newIndex">Index element in list.</param>
     /// <exception cref="ListExceptionsChange">Return exception if element contains in list.</exception>
-    public void UniqueChange(T element, int newIndex)
+    public override void Change(T element, int newIndex)
     {
         var (res, index) = Contains(element);
 
@@ -73,6 +73,6 @@ public class UniqueList<T> : MyList<T>
             throw new ListExceptionsChange("This element have in list");
         }
 
-        Change(element, newIndex);
+        base.Change(element, newIndex);
     }
 }

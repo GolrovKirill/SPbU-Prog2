@@ -1,4 +1,4 @@
-namespace UniqueList;
+namespace Unique;
 
 public class Node<T>
 {

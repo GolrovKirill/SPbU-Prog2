@@ -1,4 +1,4 @@
-namespace UniqueList;
+namespace Unique;
 
 using System.Collections;
 
@@ -13,11 +13,11 @@ public class MyList<T> : IEnumerable<T>
     /// </summary>
     /// <param name="element">Adding element.</param>
     /// <param name="index">Index element in list.</param>
-    public void Add(T element, int index)
+    public virtual void Add(T element, int index)
     {
-        if (index > cnt)
+        if (index > Count)
         {
-            throw new AggregateException("Out of index");
+            throw new IndexOutOfRangeException("Out of index");
         }
 
         var node = new Node<T>(element, index);
@@ -30,7 +30,7 @@ public class MyList<T> : IEnumerable<T>
         {
             var currentNode = head;
 
-            while (currentNode.Next != null || currentNode == head)
+            while (currentNode.Next is not null || currentNode == head)
             {
                 while (currentNode.Index + 1 < index)
                 {
@@ -46,8 +46,6 @@ public class MyList<T> : IEnumerable<T>
                     {
                         break;
                     }
-
-                    continue;
                 }
 
                 currentNode.Index += 1;
@@ -61,54 +59,37 @@ public class MyList<T> : IEnumerable<T>
     /// <summary>
     /// Remove element in list.
     /// </summary>
-    /// <param name="index">Index element in list.</param>
-    public void Remove(int index)
+    /// <param name="element">Element in list.</param>
+    public virtual void Remove(T element)
     {
-        if (index >= cnt)
-        {
-            throw new AggregateException("Out of index");
-        }
+        var previous = head;
+        var currentNode = head;
+        var countDelent = 0;
 
-        Node<T>? previous = null;
-        var currentNode = head.Next;
-
-        if (index == 0)
+        while (currentNode is not null)
         {
-            head = currentNode;
-            while (currentNode != null)
+            if (Equals(currentNode.Data, element) && currentNode == head)
             {
-                currentNode.Index -= 1;
                 currentNode = currentNode.Next;
+                head = currentNode;
+                previous = head;
+                countDelent++;
             }
-        }
-        else
-        {
-            currentNode = head;
-
-            while (currentNode != null)
+            else if (Equals(currentNode.Data, element) && currentNode != head)
             {
-                while (currentNode.Index < index)
-                {
-                    previous = currentNode;
-                    currentNode = currentNode.Next;
-                }
-
-                if (currentNode.Index == index)
-                {
-                    previous.Next = currentNode.Next;
-                    currentNode = currentNode.Next;
-                    if (currentNode == null)
-                    {
-                        break;
-                    }
-                }
-
-                currentNode.Index -= 1;
+                previous.Next = currentNode.Next;
+                currentNode = currentNode.Next;
+                countDelent++;
+            }
+            else if (!Equals(currentNode.Data, element))
+            {
+                currentNode.Index -= countDelent;
+                previous = currentNode;
                 currentNode = currentNode.Next;
             }
         }
 
-        cnt--;
+        cnt -= countDelent;
     }
 
     /// <summary>
@@ -116,11 +97,11 @@ public class MyList<T> : IEnumerable<T>
     /// </summary>
     /// <param name="element">Changing element.</param>
     /// <param name="index">Index element in list.</param>
-    public void Change(T element, int index)
+    public virtual void Change(T element, int index)
     {
-        if (index >= cnt)
+        if (index >= Count)
         {
-            throw new AggregateException("Out of index");
+            throw new IndexOutOfRangeException("Out of index");
         }
 
         if (head != null && index == 0)
@@ -180,5 +161,5 @@ public class MyList<T> : IEnumerable<T>
     /// <summary>
     /// Gets a value indicating whether return true if list is empty, else return false.
     /// </summary>
-    public bool IsEmpty => cnt == 0;
+    public bool IsEmpty => Count == 0;
 }

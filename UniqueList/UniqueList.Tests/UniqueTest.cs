@@ -1,10 +1,10 @@
-using UniqueList;
+using Unique;
 
 namespace UniqueList.Tests;
 
 [TestFixture]
-[TestOf(typeof(UniqueList<>))]
-public class UniqueListTest
+[TestOf(typeof(MyList<>))]
+public class UniqueTest
 {
     private static bool AreEqual(UniqueList<int> list, IReadOnlyList<int> array)
     {
@@ -37,16 +37,38 @@ public class UniqueListTest
 
         foreach (var element in arr)
         {
-            list.UniqueAdd(element, cnt);
+            list.Add(element, cnt);
             cnt++;
         }
         
         foreach (var element in list)
         {
-            list.UniqueRemove(element);
+            list.Remove(element);
         }
         
         Assert.That(list.IsEmpty);
+    }
+    
+    [Test]
+    public void TestUniqueListRemove()
+    {
+        var arr = new int[] { 1, 2, 3, 4, 5 };
+        var list = new UniqueList<int>();
+        var res = new int[] { 2, 4 };
+        var cnt = 0;
+
+        foreach (var element in arr)
+        {
+            list.Add(element, cnt);
+            cnt++;
+        }
+        
+        list.Remove(3);
+        list.Remove(1);
+        list.Remove(5);
+        
+        
+        Assert.That(AreEqual(list, res));
     }
     
     [Test]
@@ -58,7 +80,7 @@ public class UniqueListTest
 
         foreach (var element in arr)
         {
-            list.UniqueAdd(element, cnt);
+            list.Add(element, cnt);
             cnt++;
         }
         
@@ -74,7 +96,7 @@ public class UniqueListTest
 
         foreach (var element in arr)
         {
-            list.UniqueAdd(element, cnt);
+            list.Add(element, cnt);
             cnt++;
         }
         
@@ -82,7 +104,7 @@ public class UniqueListTest
         
         foreach (var element in list)
         {
-            list.UniqueChange(element + 1, cnt);
+            list.Change(element + 1, cnt);
             cnt++;
         }
         
@@ -100,12 +122,12 @@ public class UniqueListTest
 
         foreach (var element in arr)
         {
-            list.UniqueAdd(element, cnt);
+            list.Add(element, cnt);
             cnt++;
         }
         
-        Assert.Throws<ListExceptionsChange>(() => list.UniqueChange(2, 0));
-        Assert.Throws<ListExceptionsChange>(() => list.UniqueChange(3, 1));
+        Assert.Throws<ListExceptionsChange>(() => list.Change(2, 0));
+        Assert.Throws<ListExceptionsChange>(() => list.Change(3, 1));
     }
     
     [Test]
@@ -117,12 +139,12 @@ public class UniqueListTest
 
         foreach (var element in arr)
         {
-            list.UniqueAdd(element, cnt);
+            list.Add(element, cnt);
             cnt++;
         }
         
-        Assert.Throws<ListExceptionsAdd>(() => list.UniqueAdd(2, 0));
-        Assert.Throws<ListExceptionsAdd>(() => list.UniqueAdd(3, 1));
+        Assert.Throws<ListExceptionsAdd>(() => list.Add(2, 0));
+        Assert.Throws<ListExceptionsAdd>(() => list.Add(3, 1));
     }
     
     [Test]
@@ -134,10 +156,10 @@ public class UniqueListTest
 
         foreach (var element in arr)
         {
-            list.UniqueAdd(element, cnt);
+            list.Add(element, cnt);
             cnt++;
         }
         
-        Assert.Throws<ListExceptionsRemove>(() => list.UniqueRemove(7));
+        Assert.Throws<ListExceptionsRemove>(() => list.Remove(7));
     }
 }
