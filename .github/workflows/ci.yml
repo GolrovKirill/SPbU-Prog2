@@ -12,6 +12,11 @@ jobs:
               run: for f in $(find . -name "*.sln"); do dotnet build $f; done
             - name: Run tests
               run: for f in $(find . -name "*.sln"); do dotnet test $f; done
+            - name: Upload coverage reports to Codecov
+              uses: codecov/codecov-action@v4.0.1
+              with:
+                token: ${{ secrets.CODECOV_TOKEN }}
+                slug: GolrovKirill/SPbU-Prog2
     build-Windows:
         runs-on: windows-latest
         defaults:
